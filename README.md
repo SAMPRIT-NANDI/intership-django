@@ -66,4 +66,14 @@ GET /api/vendors/vendors/ → List all
 
 =======
 # intership-django
->>>>>>> 245b02ac748fd82a059b88e7f12741a82a2b72a3
+>>>>>>> 245b02ac748fd82a059b88e7f12741a82a2b72a3<img width="1193" height="885" alt="Screenshot 2026-03-13 231555" src="https://github.com/user-attachments/assets/70b0fdb1-2231-4c4c-8861-39c21d7bdaa1" />
+
+
+<img width="1430" height="729" alt="image" src="https://github.com/user-attachments/assets/d09e3e26-7a7f-4dc3-bacf-a662d3359851" />
+
+>>> dash board internface
+>>> <img width="1871" height="856" alt="image" src="https://github.com/user-attachments/assets/fc2be17d-82b2-4da3-94e9-95632612cdd5" />
+
+<img width="1536" height="908" alt="image" src="https://github.com/user-attachments/assets/52ccb97f-f11c-4033-ba78-79b7ea9a57f6" />
+
+
