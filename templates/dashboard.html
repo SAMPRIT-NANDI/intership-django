@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internship Management Dashboard - Professional Pipeline</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+<body class="dark">
+  <!-- Theme Toggle -->
+  <button id="theme-toggle" class="fixed top-4 right-4 z-50 p-3 bg-white/20 hover:bg-white/30 backdrop-blur rounded-xl shadow-lg border transition-all">
+    <i class="fas fa-moon text-xl dark:hidden"></i>
+    <i class="fas fa-sun text-xl hidden dark:block"></i>
+  </button>
+
+  <header class="header">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-orange-500 bg-clip-text text-transparent">
+            <i class="fas fa-building-columns mr-3"></i>
+            Internship Pipeline Manager
+          </h1>
+          <p class="text-xl opacity-90 mt-2">Vendor → Product → Course → Certification - Complete Lifecycle</p>
+        </div>
+        <div class="flex gap-4">
+          <button class="px-8 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 rounded-2xl font-semibold shadow-2xl transform hover:scale-105 transition-all">
+            <i class="fas fa-rocket mr-2"></i>New Pipeline
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Global Search -->
+  <div class="search-bar bg-white/10 backdrop-blur-xl border border-white/20 max-w-4xl mx-auto mt-8 px-6 py-4 rounded-3xl shadow-2xl">
+    <div class="flex items-center gap-4">
+      <i class="fas fa-search text-2xl opacity-70"></i>
+      <input type="text" id="global-search" placeholder="🔍 Search across all entities and mappings..." class="flex-1 bg-transparent outline-none text-2xl placeholder-white/70">
+    </div>
+  </div>
+
+  <!-- Hero Stats -->
+  <section class="stats-grid">
+    <div class="stat-card animate-pulse" id="total-vendors"><i class="fas fa-building text-3xl text-blue-400 mb-4 block"></i><div class="text-4xl font-black" id="vendor-count">0</div><div>Vendors</div></div>
+    <div class="stat-card animate-pulse" id="total-products"><i class="fas fa-box text-3xl text-green-400 mb-4 block"></i><div class="text-4xl font-black" id="product-count">0</div><div>Products</div></div>
+    <div class="stat-card animate-pulse" id="total-courses"><i class="fas fa-graduation-cap text-3xl text-purple-400 mb-4 block"></i><div class="text-4xl font-black" id="course-count">0</div><div>Courses</div></div>
+    <div class="stat-card animate-pulse" id="total-certifications"><i class="fas fa-certificate text-3xl text-orange-400 mb-4 block"></i><div class="text-4xl font-black" id="cert-count">0</div><div>Certifications</div></div>
+    <div class="stat-card animate-pulse" id="total-mappings"><i class="fas fa-link text-3xl text-indigo-400 mb-4 block"></i><div class="text-4xl font-black" id="mapping-count">0</div><div>Mappings</div></div>
+    <div class="stat-card animate-pulse" id="pipeline-complete"><i class="fas fa-chart-line text-3xl text-emerald-400 mb-4 block"></i><div class="text-4xl font-black" id="pipeline-count">0%</div><div>Pipeline Complete</div></div>
+  </section>
+
+  <!-- Pipeline Chart -->
+  <section class="chart-section max-w-6xl mx-auto px-6 py-12">
+    <h2 class="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+      <i class="fas fa-diagram-project mr-3"></i>Pipeline Flow Visualization
+    </h2>
+    <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-2xl">
+      <canvas id="pipelineChart" height="200"></canvas>
+    </div>
+  </section>
+
+  <!-- Entities Grid - Full Pipeline -->
+  <section class="entities-grid">
+    <!-- Vendor Section -->
+    <div id="vendors" class="entity-section relative">
+      <div class="section-title flex items-center justify-between">
+        <span><i class="fas fa-building mr-2 text-blue-400"></i>Vendors (Pipeline Stage 1)</span>
+        <button class="btn add-btn"><i class="fas fa-plus mr-1"></i>Add</button>
+      </div>
+      <div class="search-section mt-4">
+        <input type="text" class="entity-search w-full" placeholder="Search vendors..." data-entity="vendors">
+      </div>
+      <div class="item-list mt-4"></div>
+      <div class="add-form hidden mt-6 p-6 bg-white/10 rounded-2xl border border-white/20">
+        <form data-entity="vendors">
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <input name="name" placeholder="Company Name" class="input-field" required>
+            <input name="code" placeholder="Code (e.g. TC001)" class="input-field" required>
+          </div>
+          <textarea name="description" placeholder="Description (optional)" class="input-field"></textarea>
+          <button type="submit" class="btn w-full mt-4"><i class="fas fa-save mr-2"></i>Create Vendor</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Product Section -->
+    <div id="products" class="entity-section relative">
+      <div class="section-title flex items-center justify-between">
+        <span><i class="fas fa-box mr-2 text-green-400"></i>Products (Stage 2)</span>
+        <button class="btn add-btn"><i class="fas fa-plus mr-1"></i>Add</button>
+      </div>
+      <div class="search-section mt-4">
+        <input type="text" class="entity-search w-full" placeholder="Search products..." data-entity="products">
+      </div>
+      <div class="item-list mt-4"></div>
+      <div class="add-form hidden mt-6 p-6 bg-white/10 rounded-2xl border border-white/20">
+        <form data-entity="products">
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <input name="name" placeholder="Product Name" class="input-field" required>
+            <input name="code" placeholder="Code (e.g. PL001)" class="input-field" required>
+          </div>
+          <textarea name="description" placeholder="Description" class="input-field"></textarea>
+          <button type="submit" class="btn w-full mt-4"><i class="fas fa-save mr-2"></i>Create Product</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Vendor-Product Mapping -->
+    <div id="vendor-product-mappings" class="entity-section relative">
+      <div class="section-title flex items-center justify-between">
+        <span><i class="fas fa-link mr-2 text-indigo-400"></i>Vendor-Product Links</span>
+        <button class="btn add-btn"><i class="fas fa-plus mr-1"></i>Link</button>
+      </div>
+      <div class="search-section mt-4">
+        <input type="text" class="entity-search w-full" placeholder="Search mappings..." data-entity="vendor-product-mappings">
+      </div>
+      <div class="item-list mt-4"></div>
+      <div class="add-form hidden mt-6 p-6 bg-white/10 rounded-2xl border border-white/20">
+        <form data-entity="vendor-product-mappings">
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <select name="vendor" class="input-field" required><option>Vendor ID</option></select>
+            <select name="product" class="input-field" required><option>Product ID</option></select>
+          </div>
+          <label class="flex items-center gap-2"><input type="checkbox" name="primary_mapping" class="w-4 h-4"> Primary Mapping</label>
+          <button type="submit" class="btn w-full mt-4"><i class="fas fa-link mr-2"></i>Create Link</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Course Section -->
+    <div id="courses" class="entity-section relative">
+      <div class="section-title flex items-center justify-between">
+        <span><i class="fas fa-graduation-cap mr-2 text-purple-400"></i>Courses (Stage 3)</span>
+        <button class="btn add-btn"><i class="fas fa-plus mr-1"></i>Add</button>
+      </div>
+      <div class="search-section mt-4">
+        <input type="text" class="entity-search w-full" placeholder="Search courses..." data-entity="courses">
+      </div>
+      <div class="item-list mt-4"></div>
+      <div class="add-form hidden mt-6 p-6 bg-white/10 rounded-2xl border border-white/20">
+        <form data-entity="courses">
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <input name="name" placeholder="Course Name" class="input-field" required>
+            <input name="code" placeholder="Code (e.g. CS101)" class="input-field" required>
+          </div>
+          <textarea name="description" placeholder="Description" class="input-field"></textarea>
+          <button type="submit" class="btn w-full mt-4"><i class="fas fa-save mr-2"></i>Create Course</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Certification Section -->
+    <div id="certifications" class="entity-section relative">
+      <div class="section-title flex items-center justify-between">
+        <span><i class="fas fa-certificate mr-2 text-orange-400"></i>Certifications (Stage 4)</span>
+        <button class="btn add-btn"><i class="fas fa-plus mr-1"></i>Add</button>
+      </div>
+      <div class="search-section mt-4">
+        <input type="text" class="entity-search w-full" placeholder="Search certifications..." data-entity="certifications">
+      </div>
+      <div class="item-list mt-4"></div>
+      <div class="add-form hidden mt-6 p-6 bg-white/10 rounded-2xl border border-white/20">
+        <form data-entity="certifications">
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <input name="name" placeholder="Certification Name" class="input-field" required>
+            <input name="code" placeholder="Code (e.g. CERT001)" class="input-field" required>
+          </div>
+          <textarea name="description" placeholder="Description" class="input-field"></textarea>
+          <button type="submit" class="btn w-full mt-4"><i class="fas fa-save mr-2"></i>Create Certification</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Product-Course Mapping -->
+    <div id="product-course-mappings" class="entity-section relative">
+      <div class="section-title flex items-center justify-between">
+        <span><i class="fas fa-link mr-2 text-indigo-400"></i>Product-Course Links</span>
+        <button class="btn add-btn"><i class="fas fa-plus mr-1"></i>Link</button>
+      </div>
+      <div class="search-section mt-4">
+        <input type="text" class="entity-search w-full" placeholder="Search mappings..." data-entity="product-course-mappings">
+      </div>
+      <div class="item-list mt-4"></div>
+      <div class="add-form hidden mt-6 p-6 bg-white/10 rounded-2xl border border-white/20">
+        <form data-entity="product-course-mappings">
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <select name="product" class="input-field" required><option>Product ID</option></select>
+            <select name="course" class="input-field" required><option>Course ID</option></select>
+          </div>
+          <label class="flex items-center gap-2"><input type="checkbox" name="primary_mapping"> Primary</label>
+          <button type="submit" class="btn w-full mt-4"><i class="fas fa-link mr-2"></i>Create Link</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Course-Certification Mapping -->
+    <div id="course-certification-mappings" class="entity-section relative">
+      <div class="section-title flex items-center justify-between">
+        <span><i class="fas fa-link mr-2 text-indigo-400"></i>Course-Cert Links</span>
+        <button class="btn add-btn"><i class="fas fa-plus mr-1"></i>Link</button>
+      </div>
+      <div class="search-section mt-4">
+        <input type="text" class="entity-search w-full" placeholder="Search mappings..." data-entity="course-certification-mappings">
+      </div>
+      <div class="item-list mt-4"></div>
+      <div class="add-form hidden mt-6 p-6 bg-white/10 rounded-2xl border border-white/20">
+        <form data-entity="course-certification-mappings">
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <select name="course" class="input-field" required><option>Course ID</option></select>
+            <select name="certification" class="input-field" required><option>Certification ID</option></select>
+          </div>
+          <label class="flex items-center gap-2"><input type="checkbox" name="primary_mapping"> Primary</label>
+          <button type="submit" class="btn w-full mt-4"><i class="fas fa-link mr-2"></i>Create Link</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
+
+  <script src="/static/js/dashboard.js"></script>
+  <script>
+    // Auto dark mode
+    if (localStorage.theme === 'light' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+      document.documentElement.classList.remove('dark')
+    }
+  </script>
+</body>
+</html>
+
